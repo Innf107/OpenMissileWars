@@ -19,11 +19,16 @@ public class WelcomeHandler implements Listener {
         openComponent.setColor(ChatColor.GREEN);
         openComponent.setBold(true);
 
-        TextComponent mwComponent = new TextComponent("MissileWars");
+        TextComponent mwComponent = new TextComponent("MissileWars ");
         mwComponent.setColor(ChatColor.RED);
         mwComponent.setBold(true);
 
-        TextComponent welcomeToOpenMwMessage = new TextComponent(welcomeToComponent, openComponent, mwComponent);
+        TextComponent waterEditionComponent = new TextComponent("Water Edition");
+        waterEditionComponent.setColor(ChatColor.LIGHT_PURPLE);
+        waterEditionComponent.setBold(true);
+        waterEditionComponent.setUnderlined(true);
+
+        TextComponent welcomeToOpenMwMessage = new TextComponent(welcomeToComponent, openComponent, mwComponent, waterEditionComponent);
 
         TextComponent githubMessage = new TextComponent("Click here for our GitHub page");
         githubMessage.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://github.com/LlewVallis/OpenMissileWars"));

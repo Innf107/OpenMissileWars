@@ -77,6 +77,7 @@ public class WorldManager {
         player.setFallDistance(0);
         player.setVelocity(new Vector());
         player.setHealth(20);
+        player.setPlayerWeather(WeatherType.DOWNFALL);
 
         globalTeamManager.removePlayerFromTeam(player);
 

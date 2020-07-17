@@ -16,7 +16,7 @@ import java.util.Set;
 public class EquipmentProvider {
 
     public void giveToPlayer(Player player, GameTeam team) {
-        Color color = team == GameTeam.GREEN ? Color.LIME : Color.RED;
+        Color color = team == GameTeam.GREEN ? Color.fromRGB(29, 143, 97) : Color.fromRGB(96, 32, 135);
 
         ItemStack helmet = new ItemStack(Material.LEATHER_HELMET);
         ItemStack chestplate = new ItemStack(Material.LEATHER_CHESTPLATE);
@@ -32,15 +32,16 @@ public class EquipmentProvider {
             armourPiece.setItemMeta(meta);
         }
 
-        ItemStack bow = new ItemStack(Material.BOW);
+        ItemStack rod = new ItemStack(Material.FISHING_ROD);
 
-        ItemMeta bowMeta = bow.getItemMeta();
-        bowMeta.setDisplayName(ChatColor.RESET + "GunBlade");
-        bow.setItemMeta(bowMeta);
+        ItemMeta rodMeta = rod.getItemMeta();
+        rodMeta.setDisplayName(ChatColor.RESET + "FishingBlade");
+        rod.setItemMeta(rodMeta);
 
-        bow.addUnsafeEnchantment(Enchantment.ARROW_FIRE, 1);
-        bow.addUnsafeEnchantment(Enchantment.DAMAGE_ALL, 4);
-        bow.addUnsafeEnchantment(Enchantment.DURABILITY, 10);
+        rod.addUnsafeEnchantment(Enchantment.DAMAGE_ALL, 4);
+        rod.addUnsafeEnchantment(Enchantment.DURABILITY, 10);
+
+        ItemStack bucket = new ItemStack(Material.BUCKET);
 
         PlayerInventory inventory = player.getInventory();
 
@@ -49,6 +50,6 @@ public class EquipmentProvider {
         inventory.setLeggings(leggings);
         inventory.setBoots(boots);
 
-        inventory.addItem(bow);
+        inventory.addItem(rod, bucket);
     }
 }

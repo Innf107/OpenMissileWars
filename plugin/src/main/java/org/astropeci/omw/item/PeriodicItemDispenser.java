@@ -15,10 +15,7 @@ import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -37,8 +34,7 @@ public class PeriodicItemDispenser implements AutoCloseable {
             simpleItem(Material.OCELOT_SPAWN_EGG, "Lightning"),
             simpleItem(Material.GUARDIAN_SPAWN_EGG, "Guardian"),
             simpleItem(Material.BLAZE_SPAWN_EGG, "Fireball"),
-            simpleItem(Material.SNOWBALL, "Shield"),
-            new ItemStack(Material.ARROW, 3)
+            simpleItem(Material.SNOWBALL, "Shield")
     );
 
     private boolean shouldRun = true;
@@ -97,16 +93,30 @@ public class PeriodicItemDispenser implements AutoCloseable {
                 .filter(player -> player.getGameMode() == GameMode.SURVIVAL)
                 .collect(Collectors.toSet());
 
-        List<ItemStack> itemList = new ArrayList<>(items);
-        Collections.shuffle(itemList);
+        if (new Random().nextInt(4) == 0) {
+            for (Player player : players) {
+                PlayerInventory inventory = player.getInventory();
 
-        ItemStack item = itemList.get(0);
+                for (ItemStack stack : inventory.getContents()) {
+                    if (stack == null) continue;
 
-        for (Player player : players) {
-            PlayerInventory inventory = player.getInventory();
+                    if (stack.getType() == Material.BUCKET) {
+                        stack.setType(Material.WATER_BUCKET);
+                    }
+                }
+            }
+        } else {
+            List<ItemStack> itemList = new ArrayList<>(items);
+            Collections.shuffle(itemList);
 
-            if (!inventory.contains(item.getType()) && inventory.getItemInOffHand().getType() != item.getType()) {
-                inventory.addItem(item);
+            ItemStack item = itemList.get(0);
+
+            for (Player player : players) {
+                PlayerInventory inventory = player.getInventory();
+
+                if (!inventory.contains(item.getType()) && inventory.getItemInOffHand().getType() != item.getType()) {
+                    inventory.addItem(item);
+                }
             }
         }
 
