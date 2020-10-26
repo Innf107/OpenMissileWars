@@ -12,12 +12,12 @@ public class ItemDropPreventer implements Listener {
 
     private boolean ignoreNextEvent = false;
 
-    @EventHandler
-    public void onInventoryClick(InventoryClickEvent e) {
-        if (e.getWhoClicked().getGameMode() == GameMode.SURVIVAL) {
-            e.setResult(Event.Result.DENY);
-        }
-    }
+    //@EventHandler
+    //public void onInventoryClick(InventoryClickEvent e) {
+    //    if (e.getWhoClicked().getGameMode() == GameMode.SURVIVAL) {
+    //        e.setResult(Event.Result.DENY);
+    //    }
+    //}
 
     @EventHandler
     public void onItemDrop(PlayerDropItemEvent e) {
