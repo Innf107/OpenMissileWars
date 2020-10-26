@@ -18,6 +18,7 @@ import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 
+import javax.naming.ConfigurationException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -79,6 +80,7 @@ public class PeriodicItemDispenser implements AutoCloseable {
         return occupiedTeams >= 1;
     }
 
+    @SneakyThrows({InvalidConfigurationException.class})
     private void giveItemsPeriodically() {
         if (!shouldRun) {
             Bukkit.getLogger().info("Shutting down item dispenser");
@@ -90,13 +92,35 @@ public class PeriodicItemDispenser implements AutoCloseable {
                 .filter(player -> player.getGameMode() == GameMode.SURVIVAL)
                 .collect(Collectors.toSet());
 
-        List<ItemStack> itemList = new ArrayList<>(items);
-        Collections.shuffle(itemList);
+        final var settingsConfig = plugin.getConfig().getConfigurationSection("settings");
 
-        ItemStack item = itemList.get(0);
+        if(settingsConfig == null)
+            throw new InvalidConfigurationException("Config does not have a field 'settings'");
+
+        final var smartDispenser = settingsConfig.getBoolean("smartDispenser");
+
+        //Setting this to null is not particularly nice, but necessary
+        // since Java cannot infer that `item` is definitely initialized when it is used later
+        ItemStack item = null;
+
+        if (!smartDispenser){
+            final var itemList = new ArrayList<>(items);
+            Collections.shuffle(itemList);
+            item = itemList.get(0);
+        }
 
         for (Player player : players) {
             PlayerInventory inventory = player.getInventory();
+
+            if (smartDispenser) {
+                final var itemList = items.stream()
+                        .filter(x -> !inventory.contains(x.getType()) && inventory.getItemInOffHand().getType() != x.getType()).distinct()
+                        .collect(Collectors.toList());
+                if(itemList.isEmpty())
+                    break;
+                Collections.shuffle(itemList);
+                item = itemList.get(0);
+            }
 
             if (!inventory.contains(item.getType()) && inventory.getItemInOffHand().getType() != item.getType()) {
                 inventory.addItem(item);

@@ -82,3 +82,6 @@ items:
 
 map:
   spawnThreshold: 48
+
+settings:
+  smartDispenser: true
